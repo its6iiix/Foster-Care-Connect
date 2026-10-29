@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Create Account - FosterCare Connect</title>
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    >
+
+    <style>
+        body {
+            background: #f4f6f9;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 30px;
+            box-sizing: border-box;
+        }
+
+        .card {
+            background: #fff;
+            border-radius: 10px;
+            padding: 40px;
+            width: 100%;
+            max-width: 460px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        }
+
+        h2 {
+            color: #301934;
+            margin: 0 0 6px 0;
+        }
+
+        .sub {
+            color: #6c757d;
+            font-size: 13px;
+            margin-bottom: 22px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 6px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #301934;
+            box-shadow: 0 0 0 3px rgba(48, 25, 52, 0.08);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            background: #301934;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 8px;
+        }
+
+        .btn:hover {
+            background: #452449;
+        }
+
+        .btn:disabled {
+            background: #8c7a8f;
+            cursor: not-allowed;
+        }
+
+        #signupMessage {
+            margin-top: 14px;
+            font-size: 13px;
+            text-align: center;
+            min-height: 18px;
+            line-height: 1.5;
+        }
+
+        .back-link {
+            text-align: center;
+            margin-top: 16px;
+            font-size: 13px;
+        }
+
+        .back-link a {
+            color: #301934;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .back-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+    <link rel="stylesheet" href="fostercare-ui.css">
+</head>
+
+<body>
+
+    <div class="card">
+
+        <h2>Create Your Account</h2>
+
+        <p class="sub">
+            For Foster Parents and Biological Parents.
+            Staff accounts (Social Worker, Clerk, etc.)
+            are created by an Administrator.
+        </p>
+
+        <form id="signupForm">
+
+            <div class="form-group">
+                <label for="suFullName">Full Name</label>
+
+                <input
+                    type="text"
+                    id="suFullName"
+                    autocomplete="name"
+                    required
+                >
+            </div>
+
+
+            <div class="form-group">
+                <label for="suEmail">Email Address</label>
+
+                <input
+                    type="email"
+                    id="suEmail"
+                    autocomplete="email"
+                    required
+                >
+            </div>
+
+
+            <div class="form-group">
+                <label for="suRole">I am a...</label>
+
+                <select id="suRole" required>
+                    <option value="">
+                        Loading roles...
+                    </option>
+                </select>
+            </div>
+
+
+            <div class="form-group">
+                <label for="suPassword">Password</label>
+
+                <input
+                    type="password"
+                    id="suPassword"
+                    autocomplete="new-password"
+                    required
+                >
+            </div>
+
+
+            <div class="form-group">
+                <label for="suConfirmPassword">
+                    Confirm Password
+                </label>
+
+                <input
+                    type="password"
+                    id="suConfirmPassword"
+                    autocomplete="new-password"
+                    required
+                >
+            </div>
+
+
+            <button
+                type="submit"
+                class="btn"
+                id="signupButton"
+            >
+                Create Account
+            </button>
+
+
+            <div id="signupMessage"></div>
+
+        </form>
+
+
+        <div class="back-link">
+            <a href="login.html">
+                Already have an account? Sign in
+            </a>
+        </div>
+
+    </div>
+
+
+    <script>
+
+        // =====================================================
+        // LOAD PUBLIC REGISTRATION ROLES
+        // =====================================================
+
+        async function loadRoles() {
+
+            const select =
+                document.getElementById('suRole');
+
+            try {
+
+                const res =
+                    await fetch('/api/public-roles');
+
+                const roles =
+                    await res.json();
+
+
+                if (!res.ok) {
+                    throw new Error(
+                        roles.error ||
+                        'Could not load roles.'
+                    );
+                }
+
+
+                select.innerHTML =
+                    '<option value="">Choose your role</option>' +
+
+                    roles.map(role =>
+                        `<option value="${role.RoleID}">
+                            ${role.RoleName}
+                        </option>`
+                    ).join('');
+
+
+            } catch (err) {
+
+                console.error(err);
+
+                select.innerHTML =
+                    '<option value="">Could not load roles -- check the server is running</option>';
+            }
+        }
+
+
+        loadRoles();
+
+
+// =====================================================
+// SIGN-UP FORM
+// =====================================================
+
+document
+    .getElementById('signupForm')
+    .addEventListener(
+        'submit',
+        async (e) => {
+
+            e.preventDefault();
+
+
+            const msg =
+                document.getElementById(
+                    'signupMessage'
+                );
+
+
+            const signupButton =
+                document.getElementById(
+                    'signupButton'
+                );
+
+
+            const password =
+                document.getElementById(
+                    'suPassword'
+                ).value;
+
+
+            const confirmPassword =
+                document.getElementById(
+                    'suConfirmPassword'
+                ).value;
+
+
+            // ==========================================
+            // CHECK PASSWORDS
+            // ==========================================
+
+            if (
+                password !==
+                confirmPassword
+            ) {
+
+                msg.style.color =
+                    '#c92a2a';
+
+                msg.textContent =
+                    'Passwords do not match.';
+
+                return;
+            }
+
+
+            // ==========================================
+            // BUILD REQUEST
+            // ==========================================
+
+            const body = {
+
+                fullName:
+                    document
+                        .getElementById(
+                            'suFullName'
+                        )
+                        .value
+                        .trim(),
+
+                email:
+                    document
+                        .getElementById(
+                            'suEmail'
+                        )
+                        .value
+                        .trim()
+                        .toLowerCase(),
+
+                password:
+                    password,
+
+                roleId:
+                    document
+                        .getElementById(
+                            'suRole'
+                        )
+                        .value
+            };
+
+
+            // ==========================================
+            // CHECK ROLE
+            // ==========================================
+
+            if (!body.roleId) {
+
+                msg.style.color =
+                    '#c92a2a';
+
+                msg.textContent =
+                    'Please choose a role.';
+
+                return;
+            }
+
+
+            // ==========================================
+            // SHOW LOADING STATE
+            // ==========================================
+
+            signupButton.disabled =
+                true;
+
+            signupButton.textContent =
+                'Creating Account...';
+
+
+            msg.style.color =
+                '#555';
+
+            msg.textContent =
+                'Creating your account...';
+
+
+            try {
+
+                // ======================================
+                // SEND SIGN-UP REQUEST
+                // ======================================
+
+                const res =
+                    await fetch(
+                        '/api/signup',
+                        {
+                            method: 'POST',
+
+                            headers: {
+                                'Content-Type':
+                                    'application/json'
+                            },
+
+                            body:
+                                JSON.stringify(
+                                    body
+                                )
+                        }
+                    );
+
+
+                const data =
+                    await res.json();
+
+
+                // ======================================
+                // ACCOUNT CREATED
+                // ======================================
+
+                if (res.ok) {
+
+                    msg.style.color =
+                        '#2b8a3e';
+
+                    msg.textContent =
+                        data.message ||
+                        'Account created successfully! Redirecting to login...';
+
+
+                    // Remove any old verification data
+                    // left over from previous testing.
+
+                    sessionStorage.removeItem(
+                        'verificationEmail'
+                    );
+
+
+                    // ==================================
+                    // OPEN LOGIN PAGE
+                    // ==================================
+
+                    setTimeout(
+                        () => {
+
+                            window.location.href =
+                                'login.html';
+
+                        },
+                        1200
+                    );
+
+
+                    return;
+                }
+
+
+                // ======================================
+                // SIGN-UP FAILED
+                // ======================================
+
+                msg.style.color =
+                    '#c92a2a';
+
+                msg.textContent =
+                    data.error ||
+                    'Signup failed.';
+
+
+                signupButton.disabled =
+                    false;
+
+                signupButton.textContent =
+                    'Create Account';
+
+
+            } catch (err) {
+
+                // ======================================
+                // SERVER CONNECTION ERROR
+                // ======================================
+
+                console.error(err);
+
+
+                msg.style.color =
+                    '#c92a2a';
+
+                msg.textContent =
+                    'Could not reach the server.';
+
+
+                signupButton.disabled =
+                    false;
+
+                signupButton.textContent =
+                    'Create Account';
+            }
+
+        }
+    );
+    </script>
+
+</body>
+</html>

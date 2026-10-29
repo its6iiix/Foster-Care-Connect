@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Login - FosterCare Connect</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    >
+
+    <style>
+        body {
+            background: #f4f6f9;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .landing-split {
+            display: flex;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        .brand-pane {
+            flex: 1.2;
+            background: linear-gradient(135deg, #301934 0%, #1f1022 100%);
+            color: #fff;
+            padding: 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-sizing: border-box;
+        }
+
+        .brand-logo {
+            font-size: 18px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            letter-spacing: 0.5px;
+        }
+
+        .brand-logo i {
+            color: #b19cd9;
+            font-size: 22px;
+        }
+
+        .brand-hero h1 {
+            font-size: 42px;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 20px;
+        }
+
+        .brand-hero h1 span {
+            color: #b19cd9;
+        }
+
+        .brand-hero p {
+            font-size: 16px;
+            color: #d8b4e2;
+            line-height: 1.6;
+            max-width: 480px;
+            margin-bottom: 30px;
+        }
+
+        .brand-features {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .feature-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 3px solid #b19cd9;
+        }
+
+        .feature-item h4 {
+            font-size: 14px;
+            margin: 0 0 5px 0;
+            color: #fff;
+        }
+
+        .feature-item p {
+            font-size: 12px;
+            color: #d8b4e2;
+            margin: 0;
+        }
+
+        .brand-footer {
+            font-size: 13px;
+            color: #9c84aa;
+        }
+
+        .form-pane {
+            flex: 1.1;
+            background: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 30px;
+            box-sizing: border-box;
+            overflow-y: auto;
+        }
+
+        .auth-card {
+            width: 100%;
+            max-width: 440px;
+        }
+
+        .auth-header {
+            margin-bottom: 20px;
+        }
+
+        .auth-header h2 {
+            font-size: 24px;
+            color: #301934;
+            font-weight: 700;
+            margin: 0 0 6px 0;
+        }
+
+        .auth-header p {
+            font-size: 13px;
+            color: #6c757d;
+            margin: 0;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 6px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 11px 14px;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            font-size: 14px;
+            box-sizing: border-box;
+            transition: all 0.2s;
+            background: #f8f9fa;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #301934;
+            background: #fff;
+            box-shadow: 0 0 0 3px rgba(48, 25, 52, 0.15);
+        }
+
+        .auth-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            margin-bottom: 18px;
+            color: #495057;
+        }
+
+        .auth-options a {
+            color: #301934;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .auth-options a:hover {
+            text-decoration: underline;
+        }
+
+        .btn-auth {
+            width: 100%;
+            padding: 13px;
+            background: #301934;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-auth:hover {
+            background: #452449;
+        }
+
+        .btn-auth:disabled {
+            background: #8c7a8f;
+            cursor: not-allowed;
+        }
+
+        #loginMessage {
+            margin-top: 14px;
+            font-size: 13px;
+            text-align: center;
+            min-height: 18px;
+            line-height: 1.5;
+        }
+
+        .auth-note {
+            text-align: center;
+            margin-top: 18px;
+            font-size: 12px;
+            color: #6c757d;
+        }
+
+        .auth-note a {
+            color: #6a3274;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .auth-note a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 900px) {
+
+            .landing-split {
+                flex-direction: column;
+                overflow-y: auto;
+            }
+
+            .brand-pane {
+                display: none;
+            }
+
+            .form-pane {
+                height: 100vh;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="fostercare-ui.css">
+</head>
+
+<body>
+
+    <div class="landing-split">
+
+        <!-- Left Hero & Branding Pane -->
+
+        <div class="brand-pane">
+
+            <div class="brand-logo">
+                <i class="fas fa-shield-heart"></i>
+                FOSTERCARE CONNECT
+            </div>
+
+
+            <div class="brand-hero">
+
+                <h1>
+                    Streamlining Child Welfare in the
+                    <span>Eastern Cape</span>
+                </h1>
+
+
+                <p>
+                    A secure, unified digital platform empowering
+                    social workers, administrative clerks, foster
+                    families, and agency managers to coordinate
+                    care and protect children efficiently.
+                </p>
+
+
+                <div class="brand-features">
+
+                    <div class="feature-item">
+
+                        <h4>
+                            Secure Compliance
+                        </h4>
+
+                        <p>
+                            Role-based access aligned with
+                            statutory review guidelines.
+                        </p>
+
+                    </div>
+
+
+                    <div class="feature-item">
+
+                        <h4>
+                            Real-Time Telemetry
+                        </h4>
+
+                        <p>
+                            Instant tracking of active cases
+                            and court schedules.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="brand-footer">
+                &copy; 2026 Eastern Cape Child Welfare Cluster.
+                All rights reserved.
+            </div>
+
+        </div>
+
+
+        <!-- Right Form Pane -->
+
+        <div class="form-pane">
+
+            <div class="auth-card">
+
+                <div class="auth-header">
+
+                    <h2>
+                        Welcome Back
+                    </h2>
+
+                    <p>
+                        Please sign in to access your portal dashboard
+                    </p>
+
+                </div>
+
+
+                <form id="loginForm">
+
+                    <div class="form-group">
+
+                        <label for="loginEmail">
+                            Email Address
+                        </label>
+
+                        <input
+                            type="email"
+                            id="loginEmail"
+                            placeholder="name@example.com"
+                            autocomplete="email"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="loginPassword">
+                            Password
+                        </label>
+
+                        <input
+                            type="password"
+                            id="loginPassword"
+                            placeholder="••••••••"
+                            autocomplete="current-password"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="auth-options">
+
+                        <span></span>
+
+                        <span
+                            style="
+                                color: #868e96;
+                                font-size: 12px;
+                            "
+                        >
+                            Forgot your password?
+                            Contact your administrator.
+                        </span>
+
+                    </div>
+
+
+                    <button
+                        type="submit"
+                        class="btn-auth"
+                        id="loginButton"
+                    >
+                        Sign In
+                    </button>
+
+
+                    <div id="loginMessage"></div>
+
+                </form>
+
+
+                <p class="auth-note">
+                    Your role and dashboard are determined
+                    automatically by your account -- there's
+                    no need to select one.
+                </p>
+
+
+                <p class="auth-note">
+                    New Foster Parent or Biological Parent?
+                    <a href="signup.html">
+                        Create an account
+                    </a>
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!--
+        Keep your existing script.js.
+
+        This file may contain other FosterCare Connect
+        functionality used throughout the system.
+    -->
+
+    <script src="script.js"></script>
+
+</body>
+</html>
